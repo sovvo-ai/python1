@@ -1,0 +1,32 @@
+
+{% extends 'blog/base.html' %}
+{% load blog_filters %}
+
+{% block title %}文章列表 - 我的博客{% endblock %}
+
+{% block content %}
+    <h2>文章列表</h2>
+
+    {# 调试提示：先在 shell 中创建几篇 published 文章再测试 #}
+    {% for post in page_obj %}
+        <article>
+            <h3>
+                <a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a>
+            </h3>
+            <p class="meta">
+                分类：{{ post.category.name }} |
+                发布于：{{ post.created_at|date:"Y-m-d H:i" }}
+            </p>
+            <p>{{ post.content|truncatewords:30 }}</p>
+            <p>{{ post.content|first_sentence }}</p>
+            <p class="meta">阅读时间：{{ post.content|reading_time }}</p>
+            {% if post.updated_at != post.created_at %}
+                <small>（{{ post.updated_at|date:"Y-m-d" }} 更新）</small>
+            {% endif %}
+        </article>
+    {% empty %}
+        <p>📝 暂无文章，请先通过 Django Shell 或 Admin 后台创建文章。</p>
+    {% endfor %}
+
+    {% include 'blog/_pagination.html' %}
+{% endblock %}

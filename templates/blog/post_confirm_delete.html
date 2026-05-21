@@ -1,0 +1,14 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}删除确认 - {{ post.title }}{% endblock %}
+
+{% block content %}
+    <h2>确认删除</h2>
+    <p>确定要删除文章 "<strong>{{ post.title }}</strong>" 吗？此操作不可撤销。</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" style="background: red; color: white;">确认删除</button>
+        <a href="{% url 'post_detail' post.pk %}">取消</a>
+    </form>
+{% endblock %}
